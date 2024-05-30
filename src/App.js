@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const snackbarRef = useRef(null);
+
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    const snackbar = snackbarRef.current;
+    snackbar.className = 'snackbar show';
+    setTimeout(() => {
+      if (snackbar.className.includes('show')) {
+        snackbar.className = 'snackbar';
+      }
+    }, 6000); 
+  };
+
+  const closeSnackbar = () => {
+    const snackbar = snackbarRef.current;
+    snackbar.className = 'snackbar';
+  };
+
+  useEffect(() => {
+    showSnackbar('Revisa tu URL'); 
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="arrow-container">
+        <div className="arrow" />
+      </div>
+      <div ref={snackbarRef} className="snackbar">
+        <div className="message">{snackbarMessage}</div>
+        <button className="action-btn" onClick={closeSnackbar}>Close</button>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
